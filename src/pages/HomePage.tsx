@@ -3,6 +3,7 @@ import MainLayout from "../layouts/MainLayout";
 import SearchBar from "../components/common/SearchBar";
 import { getProducts } from "../services/productService";
 import { useProductSearch } from "../hooks/useProductSearch";
+import Hero from "../components/home/Hero";
 
 function HomePage() {
   const products = getProducts();
@@ -21,14 +22,7 @@ function HomePage() {
       onChange={setSearch}
       />
 
-      <h2 className="text-4xl font-bold">
-        Bienvenido a MDI Shop
-            
-      </h2>
-
-      <p className="mt-4 text-slate-600">
-        Encuentra miles de productos de tecnología al mejor precio.
-      </p>
+    <Hero />
       
     <ProductGrid products={filteredProducts} />
 
