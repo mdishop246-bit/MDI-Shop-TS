@@ -1,8 +1,15 @@
-function SearchBar() {
+interface SearchBarProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+function SearchBar({ value, onChange }: SearchBarProps) {
   return (
     <div className="mb-8">
       <input
         type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         placeholder="Buscar productos..."
         className="
           w-full
