@@ -8,9 +8,13 @@ function ProductCard({ product }: ProductCardProps) {
   return (
     <article className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition">
 
-      <div className="h-56 bg-slate-200 flex items-center justify-center">
-        Sin imagen
-      </div>
+<div className="h-56 bg-white flex items-center justify-center overflow-hidden">
+  <img
+    src={product.imagen}
+    alt={product.nombre}
+    className="w-full h-full object-contain p-4"
+  />
+</div>
 
       <div className="p-5">
 

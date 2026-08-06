@@ -1,3 +1,4 @@
+import hpLaptop from "../assets/images/products/hp-laptop.jpg";
 import type { Product } from "../types/product";
 
 export const products: Product[] = [
@@ -13,7 +14,7 @@ export const products: Product[] = [
 
     descripcion: "Laptop HP para oficina y estudio.",
 
-    imagen: "",
+    imagen: hpLaptop,
 
     proveedor: "CT Internacional",
 
