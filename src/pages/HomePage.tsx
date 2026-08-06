@@ -1,9 +1,10 @@
 import ProductGrid from "../components/catalog/ProductGrid";
 import MainLayout from "../layouts/MainLayout";
 import SearchBar from "../components/common/SearchBar";
-
+import { getProducts } from "../services/productService";
 
 function HomePage() {
+  const products = getProducts();
   return (
     <MainLayout>
 
@@ -18,7 +19,7 @@ function HomePage() {
         Encuentra miles de productos de tecnología al mejor precio.
       </p>
       
-      <ProductGrid />
+    <ProductGrid products={products} />
 
     </MainLayout>
   );
