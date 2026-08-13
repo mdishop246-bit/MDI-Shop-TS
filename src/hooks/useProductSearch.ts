@@ -31,10 +31,10 @@ export function useProductSearch(products: Product[]) {
     return [...result].sort((a, b) => {
       switch (sortBy) {
         case "price-asc":
-          return a.precio - b.precio;
+          return a.precioVenta - b.precioVenta;
 
         case "price-desc":
-          return b.precio - a.precio;
+          return b.precioVenta - a.precioVenta;
 
         case "name-asc":
           return a.nombre.localeCompare(b.nombre);
