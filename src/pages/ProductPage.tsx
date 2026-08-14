@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import { getProducts } from "../services/productService";
-
+import { useCart } from "../context/CartContext";
 function ProductPage() {
+  const { addToCart } = useCart();
   const { id } = useParams();
   const products = getProducts();
 
@@ -142,6 +143,7 @@ function ProductPage() {
 
           <button
             type="button"
+            onClick={() => addToCart(product)}
             className="mt-8 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700"
           >
             Comprar producto
