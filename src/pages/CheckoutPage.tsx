@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import { useCart } from "../context/CartContext";
 import { createOrder } from "../services/orderService";
@@ -17,6 +17,7 @@ interface CheckoutForm {
 
 function CheckoutPage() {
   const { items, totalPrice } = useCart();
+  const navigate = useNavigate();
 
   const [form, setForm] = useState<CheckoutForm>({
     nombre: "",
@@ -67,34 +68,37 @@ function CheckoutPage() {
     setError("");
   };
 
-    const handleSubmit = (
+  const handleSubmit = (
     event: React.FormEvent<HTMLFormElement>
-    ) => {
+  ) => {
     event.preventDefault();
 
     const hasEmptyField = Object.values(form).some(
-        (value) => value.trim() === ""
+      (value) => value.trim() === ""
     );
 
     if (hasEmptyField) {
-        setError("Completa todos los campos para continuar.");
-        return;
+      setError("Completa todos los campos para continuar.");
+      return;
     }
 
     setError("");
 
     const order = createOrder({
-        products: items,
-        shippingAddress: form,
-        total: totalPrice,
+      products: items,
+      shippingAddress: form,
+      total: totalPrice,
     });
 
-    console.log("Pedido creado:", order);
+    navigate("/pedido/confirmacion", {
+      state: {
+        orderId: order.id,
+        total: order.total,
+      },
+    });
+  };
 
-    alert(
-        `Pedido ${order.id} creado correctamente. El pago se integrará próximamente.`
-    );
-    };
+
 
   return (
     <MainLayout>
