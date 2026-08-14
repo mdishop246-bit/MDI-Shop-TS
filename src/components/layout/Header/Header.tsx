@@ -30,7 +30,12 @@ function Header() {
           >
             Catálogo
           </Link>
-
+          <Link
+          to="/pedidos"
+          className="text-slate-700 hover:text-blue-700"
+          >
+          Mis pedidos
+          </Link>
           <Link
             to="/carrito"
             className="text-slate-700 hover:text-blue-700"

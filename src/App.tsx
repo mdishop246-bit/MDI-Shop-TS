@@ -4,6 +4,8 @@ import ProductPage from "./pages/ProductPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderConfirmationPage from "./pages/OrderConfirmationPage";
+import OrdersPage from "./pages/OrdersPage";
+import OrderDetailPage from "./pages/OrderDetailPage";
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
       <Route path="/carrito" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/pedido/confirmacion" element={<OrderConfirmationPage />}/>
+      <Route path="/pedidos" element={<OrdersPage />} />
+      <Route path="/pedido/:id" element={<OrderDetailPage />}/>
     </Routes>
   );
 }

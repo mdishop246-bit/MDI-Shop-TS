@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import { useCart } from "../context/CartContext";
 import { createOrder } from "../services/orderService";
+import { saveOrder } from "../services/orderStorage";
 
 interface CheckoutForm {
   nombre: string;
@@ -85,17 +86,19 @@ function CheckoutPage() {
     setError("");
 
     const order = createOrder({
-      products: items,
-      shippingAddress: form,
-      total: totalPrice,
+    products: items,
+    shippingAddress: form,
+    total: totalPrice,
     });
 
+    saveOrder(order);
+
     navigate("/pedido/confirmacion", {
-      state: {
+    state: {
         orderId: order.id,
         total: order.total,
-      },
-    });
+    },
+   });
   };
 
 
