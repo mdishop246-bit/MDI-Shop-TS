@@ -36,6 +36,14 @@ function Header() {
           >
           Mis pedidos
           </Link>
+
+          <Link
+          to="/cuenta"
+          className="text-slate-700 hover:text-blue-700"
+          >
+          Mi cuenta
+          </Link>
+
           <Link
             to="/carrito"
             className="text-slate-700 hover:text-blue-700"

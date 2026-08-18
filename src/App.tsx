@@ -6,6 +6,7 @@ import CheckoutPage from "./pages/CheckoutPage";
 import OrderConfirmationPage from "./pages/OrderConfirmationPage";
 import OrdersPage from "./pages/OrdersPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
+import AccountPage from "./pages/AccountPage";
 
 function App() {
   return (
@@ -16,7 +17,8 @@ function App() {
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/pedido/confirmacion" element={<OrderConfirmationPage />}/>
       <Route path="/pedidos" element={<OrdersPage />} />
-      <Route path="/pedido/:id" element={<OrderDetailPage />}/>
+      <Route path="/pedido/:id" element={<OrderDetailPage />} />
+      <Route path="/cuenta" element={<AccountPage />} />
     </Routes>
   );
 }
