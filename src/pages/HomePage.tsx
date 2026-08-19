@@ -1,34 +1,49 @@
+import { useEffect, useState } from "react";
 import ProductGrid from "../components/catalog/ProductGrid";
-import CategoryFilter from "../components/catalog/CategoryFilter";
-import BrandFilter from "../components/catalog/BrandFilter";
-import SortFilter from "../components/catalog/SortFilter";
 import MainLayout from "../layouts/MainLayout";
 import SearchBar from "../components/common/SearchBar";
-import Hero from "../components/home/Hero";
-
 import { getProducts } from "../services/productService";
 import { useProductSearch } from "../hooks/useProductSearch";
+import Hero from "../components/home/Hero";
+import type { Product } from "../types/product";
 
 function HomePage() {
-  const products = getProducts();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const categories = [...new Set(products.map((p) => p.categoria))];
-  const brands = [...new Set(products.map((p) => p.marca))];
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        setLoading(true);
+        setError("");
+
+        const data = await getProducts();
+
+        setProducts(data);
+      } catch (error) {
+        console.error("Error cargando productos:", error);
+
+        setError(
+          "No se pudieron cargar los productos. Intenta nuevamente."
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProducts();
+  }, []);
 
   const {
     search,
     setSearch,
-    selectedCategory,
-    setSelectedCategory,
-    selectedBrand,
-    setSelectedBrand,
-    sortBy,
-    setSortBy,
     filteredProducts,
   } = useProductSearch(products);
 
   return (
     <MainLayout>
+
       <SearchBar
         value={search}
         onChange={setSearch}
@@ -36,24 +51,26 @@ function HomePage() {
 
       <Hero />
 
-      <CategoryFilter
-        categories={categories}
-        selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
-      />
+      {loading && (
+        <div className="py-12 text-center">
+          <p className="text-slate-600">
+            Cargando productos...
+          </p>
+        </div>
+      )}
 
-      <BrandFilter
-        brands={brands}
-        selectedBrand={selectedBrand}
-        onSelectBrand={setSelectedBrand}
-      />
+      {error && (
+        <div className="py-12 text-center">
+          <p className="text-red-600">
+            {error}
+          </p>
+        </div>
+      )}
 
-      <SortFilter
-        sortBy={sortBy}
-        onSortChange={setSortBy}
-      />
+      {!loading && !error && (
+        <ProductGrid products={filteredProducts} />
+      )}
 
-      <ProductGrid products={filteredProducts} />
     </MainLayout>
   );
 }
