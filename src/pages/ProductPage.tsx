@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import MainLayout from "../layouts/MainLayout";
 import { getProductById } from "../services/productService";
 import { useCart } from "../context/CartContext";
+
 import type { Product } from "../types/product";
 
 function ProductPage() {
-  const { addToCart } = useCart();
   const { id } = useParams();
+  const { addToCart } = useCart();
 
-  const [product, setProduct] = useState<Product | undefined>();
+  const [product, setProduct] = useState<Product | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -27,13 +29,15 @@ function ProductPage() {
 
         const data = await getProductById(id);
 
+        if (!data) {
+          setError("El producto que buscas no existe.");
+          return;
+        }
+
         setProduct(data);
       } catch (error) {
         console.error("Error cargando producto:", error);
-
-        setError(
-          "No se pudo cargar el producto. Intenta nuevamente."
-        );
+        setError("No se pudo cargar el producto.");
       } finally {
         setLoading(false);
       }
@@ -46,7 +50,7 @@ function ProductPage() {
     return (
       <MainLayout>
         <div className="py-16 text-center">
-          <p className="text-slate-600">
+          <p className="text-lg text-slate-600">
             Cargando producto...
           </p>
         </div>
@@ -74,6 +78,7 @@ function ProductPage() {
     <MainLayout>
       <div className="grid gap-10 py-10 md:grid-cols-2">
 
+        {/* Imagen */}
         <div className="flex items-center justify-center rounded-xl bg-white p-8">
           <img
             src={product.imagen}
@@ -82,7 +87,9 @@ function ProductPage() {
           />
         </div>
 
+        {/* Información */}
         <div>
+
           <p className="text-sm font-medium text-blue-600">
             {product.marca}
           </p>
@@ -96,7 +103,7 @@ function ProductPage() {
           </p>
 
           <p className="mt-6 text-3xl font-bold text-slate-900">
-            ${Number(product.precioVenta).toLocaleString("es-MX")}
+            ${product.precioVenta.toLocaleString("es-MX")}
           </p>
 
           <p className="mt-2 font-medium text-green-600">
@@ -107,7 +114,9 @@ function ProductPage() {
             {product.descripcion}
           </p>
 
+          {/* Especificaciones */}
           <div className="mt-8">
+
             <h2 className="text-2xl font-bold text-slate-900">
               Especificaciones técnicas
             </h2>
@@ -187,15 +196,16 @@ function ProductPage() {
             </div>
           </div>
 
+          {/* Comprar */}
           <button
             type="button"
             onClick={() => addToCart(product)}
-            className="mt-8 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700"
+            className="mt-8 w-full rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition hover:bg-blue-700 md:w-auto"
           >
             Comprar producto
           </button>
-        </div>
 
+        </div>
       </div>
     </MainLayout>
   );
