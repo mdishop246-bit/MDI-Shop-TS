@@ -1,17 +1,60 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
-import { getProducts } from "../services/productService";
+import { getProductById } from "../services/productService";
 import { useCart } from "../context/CartContext";
+import type { Product } from "../types/product";
+
 function ProductPage() {
   const { addToCart } = useCart();
   const { id } = useParams();
-  const products = getProducts();
 
-  const product = products.find(
-    (product) => product.id === Number(id)
-  );
+  const [product, setProduct] = useState<Product | undefined>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  if (!product) {
+  useEffect(() => {
+    async function loadProduct() {
+      if (!id) {
+        setError("Producto no encontrado.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError("");
+
+        const data = await getProductById(id);
+
+        setProduct(data);
+      } catch (error) {
+        console.error("Error cargando producto:", error);
+
+        setError(
+          "No se pudo cargar el producto. Intenta nuevamente."
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProduct();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <MainLayout>
+        <div className="py-16 text-center">
+          <p className="text-slate-600">
+            Cargando producto...
+          </p>
+        </div>
+      </MainLayout>
+    );
+  }
+
+  if (error || !product) {
     return (
       <MainLayout>
         <div className="py-16 text-center">
@@ -20,7 +63,7 @@ function ProductPage() {
           </h1>
 
           <p className="mt-4 text-slate-600">
-            El producto que buscas no existe.
+            {error || "El producto que buscas no existe."}
           </p>
         </div>
       </MainLayout>
@@ -29,7 +72,8 @@ function ProductPage() {
 
   return (
     <MainLayout>
-      <div className="grid gap-10 md:grid-cols-2 py-10">
+      <div className="grid gap-10 py-10 md:grid-cols-2">
+
         <div className="flex items-center justify-center rounded-xl bg-white p-8">
           <img
             src={product.imagen}
@@ -52,10 +96,10 @@ function ProductPage() {
           </p>
 
           <p className="mt-6 text-3xl font-bold text-slate-900">
-            ${product.precioVenta.toLocaleString("es-MX")}
+            ${Number(product.precioVenta).toLocaleString("es-MX")}
           </p>
 
-          <p className="mt-2 text-green-600 font-medium">
+          <p className="mt-2 font-medium text-green-600">
             Bajo pedido
           </p>
 
@@ -69,6 +113,7 @@ function ProductPage() {
             </h2>
 
             <div className="mt-4 space-y-3">
+
               {product.especificaciones.procesador && (
                 <p>
                   <strong>Procesador:</strong>{" "}
@@ -138,6 +183,7 @@ function ProductPage() {
                   {product.especificaciones.color}
                 </p>
               )}
+
             </div>
           </div>
 
@@ -149,6 +195,7 @@ function ProductPage() {
             Comprar producto
           </button>
         </div>
+
       </div>
     </MainLayout>
   );

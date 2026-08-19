@@ -1,6 +1,5 @@
 export interface Product {
-  id: number;
-  sku: string;
+id: string;  sku: string;
 
   nombre: string;
   marca: string;
