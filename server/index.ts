@@ -1,11 +1,14 @@
 import express from "express";
 import { prisma } from "../src/server/prisma";
+import productRoutes from "./routes/productRoutes";
 
 const app = express();
 
 const PORT = 3001;
 
 app.use(express.json());
+
+app.use("/api/products", productRoutes);
 
 app.get("/api/health", (_req, res) => {
   res.json({
