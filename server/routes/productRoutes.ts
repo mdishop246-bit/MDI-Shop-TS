@@ -30,4 +30,40 @@ router.get("/", async (_req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const product = await prisma.product.findUnique({
+      where: {
+        id: req.params.id,
+      },
+      include: {
+        category: true,
+        brand: true,
+        specifications: true,
+      },
+    });
+
+    if (!product) {
+      res.status(404).json({
+        success: false,
+        message: "Producto no encontrado.",
+      });
+
+      return;
+    }
+
+    res.json({
+      success: true,
+      product,
+    });
+  } catch (error) {
+    console.error("Error obteniendo producto:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "No se pudo obtener el producto.",
+    });
+  }
+});
+
 export default router;
